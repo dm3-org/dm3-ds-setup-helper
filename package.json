@@ -21,7 +21,8 @@
     "util": "0.12.4",
     "viem": "^2.8.12",
     "wagmi": "^2.5.11",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yaml": "^2.4.2"
   },
   "scripts": {
     "dev": "react-scripts start",
