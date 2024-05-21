@@ -2,17 +2,25 @@ import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
 import { recoverMessageAddress } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
-// import { getAccount } from "wagmi/actions";
-// import { useEffect } from "react";
+import {
+  createKeyPair,
+  createSigningKeyPair,
+  createStorageKey,
+} from "@dm3-org/dm3-lib-crypto";
+import {
+  DeliveryServiceProfile,
+  DeliveryServiceProfileKeys,
+} from "@dm3-org/dm3-lib-profile";
 
 const App = () => {
   const [ens, setEns] = useState("ens");
   const [url, setUrl] = useState("url");
-  const [profile, setProfile] = useState("");
+  const [profile, setProfile] = useState<DeliveryServiceProfile>();
+  const [keys, setKeys] = useState<DeliveryServiceProfileKeys>();
+  const [profileAndKeysCreated, setProfileAndKeysCreated] = useState(false);
   const [signature, setSignature] = useState("");
   const [recoveredAddress, setRecoveredAddress] = useState("");
   const { isConnected, address } = useAccount();
-  //const { status } = useSession();
   const {
     data: signMessageData,
     error,
@@ -28,6 +36,24 @@ const App = () => {
           signature: signMessageData,
         });
         setRecoveredAddress(recoveredAddress);
+
+        const keys: DeliveryServiceProfileKeys = {
+          encryptionKeyPair: await createKeyPair(
+            await createStorageKey(signMessageData)
+          ),
+          signingKeyPair: await createSigningKeyPair(
+            await createStorageKey(signMessageData)
+          ),
+        };
+        const profile: DeliveryServiceProfile = {
+          publicEncryptionKey: keys.encryptionKeyPair.publicKey,
+          publicSigningKey: keys.signingKeyPair.publicKey,
+          url: url,
+        };
+
+        setProfile(profile);
+        setKeys(keys);
+        setProfileAndKeysCreated(true);
       }
     })();
   }, [signMessageData, variables?.message]);
@@ -55,18 +81,19 @@ const App = () => {
   function createConfigAndProfile() {
     // alert(`The config file creation is not implemented yet! Once it is, it will use these values:
     // ${ens} and ${url}`);
-    const profile = JSON.stringify({
+    const dsEnsAndUrl = JSON.stringify({
       ens: ens,
       url: url,
     });
-    setProfile(profile);
     signMessage({
-      message: "Hello World, my profile is " + profile,
+      message:
+        "I am creating the seed for a dm3 delivery service profile by signing this message." +
+        dsEnsAndUrl,
     });
   }
 
   function publishProfile() {
-    alert(`Will publish ${profile} to the blockchain!`);
+    alert(`Will publish profile to the blockchain!`);
   }
 
   return (
@@ -107,7 +134,14 @@ const App = () => {
             Now, please connect the account that controls the ENS domain so we
             can publish the profile.
             <p>
-              Profile: {profile.length > 0 ? profile : "Finish step 1 first"}
+              Profile:{" "}
+              {profileAndKeysCreated
+                ? JSON.stringify(profile)
+                : "Finish step 1 first"}
+              Keys:{" "}
+              {profileAndKeysCreated
+                ? JSON.stringify(keys)
+                : "Finish step 1 first"}
             </p>
             <button onClick={publishProfile}>Publish profile</button>
             {/* <p>
