@@ -1,15 +1,3 @@
-import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { useEffect, useState } from "react";
-import { recoverMessageAddress } from "viem";
-import { normalize, namehash } from "viem/ens";
-import {
-  useAccount,
-  useSignMessage,
-  useEnsResolver,
-  useTransactionCount,
-  useWriteContract,
-  useReadContract,
-} from "wagmi";
 import {
   createKeyPair,
   createSigningKeyPair,
@@ -19,6 +7,16 @@ import {
   DeliveryServiceProfile,
   DeliveryServiceProfileKeys,
 } from "@dm3-org/dm3-lib-profile";
+import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { useEffect, useState } from "react";
+import { recoverMessageAddress } from "viem";
+import { namehash, normalize } from "viem/ens";
+import {
+  useAccount,
+  useEnsResolver,
+  useSignMessage,
+  useWriteContract,
+} from "wagmi";
 import * as YAML from "yaml";
 import { resolverAbi } from "./resolverAbi";
 
@@ -29,16 +27,8 @@ const App = () => {
   const [profile, setProfile] = useState<DeliveryServiceProfile>();
   const [keys, setKeys] = useState<DeliveryServiceProfileKeys>();
   const [profileAndKeysCreated, setProfileAndKeysCreated] = useState(false);
-  const [signature, setSignature] = useState("");
-  const [recoveredAddress, setRecoveredAddress] = useState("");
   const [ensResolverFound, setEnsResolverFound] = useState(false);
-  const [resolver, setResolver] = useState("");
   const { isConnected, address } = useAccount();
-  const {
-    data: transactionCountInput,
-    isFetched: transactionCountInputIsFetched,
-  } = useTransactionCount({ address });
-  const [transactionCount, setTransactionCount] = useState(0);
   const {
     data: signMessageData,
     error,
@@ -50,7 +40,12 @@ const App = () => {
     isError,
     isLoading: ensResolverIsLoading,
   } = useEnsResolver({ name: normalize(ensDomain) });
-  const { data: hash, writeContract } = useWriteContract();
+  const {
+    data: hash,
+    writeContract,
+    isPending: writeContractIsPending,
+    error: writeContractError,
+  } = useWriteContract();
 
   useEffect(() => {}, [address]);
 
@@ -66,7 +61,6 @@ const App = () => {
     ) {
       console.log("ens resolver found: ", ensResolver);
       setEnsResolverFound(true);
-      setResolver(String(ensResolver));
     }
   }, [ensResolver, isError, ensResolverIsLoading]);
 
@@ -78,7 +72,6 @@ const App = () => {
           message: variables?.message,
           signature: signature,
         });
-        setRecoveredAddress(recoveredAddress);
 
         const keys: DeliveryServiceProfileKeys = {
           encryptionKeyPair: await createKeyPair(
@@ -224,6 +217,9 @@ const App = () => {
           publish the profile.
           {/* <p>Resolver: {ensResolverIsLoading ? "" : resolver}</p> */}
           <p>
+            Write contract state: {writeContractIsPending ? "pending" : "done"}
+          </p>
+          <p>
             Profile:{" "}
             {profileAndKeysCreated
               ? JSON.stringify(profile)
@@ -234,16 +230,13 @@ const App = () => {
               : "Finish step 1 first"}
           </p>
           <button
-            disabled={
-              !profileAndKeysCreated ||
-              !ensResolverFound ||
-              !transactionCountInputIsFetched
-            }
+            disabled={!profileAndKeysCreated || !ensResolverFound}
             onClick={publishProfile}
           >
             Publish profile
           </button>
           <p>{hash && hash}</p>
+          <p>{writeContractError && JSON.stringify(writeContractError)}</p>
           {/* <p>
             load profile from file (optional):
             <input type="file" />

@@ -5,11 +5,11 @@ export const resolverAbi = [
     stateMutability: "nonpayable",
     inputs: [
       { internalType: "bytes32", name: "node", type: "bytes32" },
-      { internalType: "string calldata", name: "key", type: "string calldata" },
+      { internalType: "string", name: "key", type: "string" },
       {
-        internalType: "string calldata",
+        internalType: "string",
         name: "value",
-        type: "string calldata",
+        type: "string",
       },
     ],
     outputs: [],
