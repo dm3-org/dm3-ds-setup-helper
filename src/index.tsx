@@ -20,14 +20,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const config = getDefaultConfig({
   appName: "RainbowKit demo",
   projectId: "YOUR_PROJECT_ID",
-  chains: [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    ...(process.env.REACT_APP_ENABLE_TESTNETS === "true" ? [sepolia] : []),
-  ],
+  chains: [mainnet, optimism, sepolia],
 });
 
 const root = ReactDOM.createRoot(
