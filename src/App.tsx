@@ -29,6 +29,7 @@ const App = () => {
   const [profileAndKeysCreated, setProfileAndKeysCreated] = useState(false);
   const [ensResolverFound, setEnsResolverFound] = useState(false);
   const { isConnected, address } = useAccount();
+  const [keyCreationMessage, setKeyCreationMessage] = useState("");
   const {
     data: signMessageData,
     error,
@@ -114,30 +115,62 @@ const App = () => {
       ens: ensDomain,
       url: url,
     });
+    setKeyCreationMessage(
+      "I am creating the seed for a dm3 delivery service profile by signing this message." +
+        dsEnsAndUrl
+    );
     signMessage({
-      message:
-        "I am creating the seed for a dm3 delivery service profile by signing this message." +
-        dsEnsAndUrl,
+      message: keyCreationMessage,
     });
   }
 
-  function storeProfile() {
-    const fileData = YAML.stringify(profile);
+  function storeEnv() {
+    const env =
+      "SIGNING_PUBLIC_KEY={keys.signingKeyPair.publicKey}\n" +
+      "SIGNING_PRIVATE_KEY={keys.signingKeyPair.privateKey}\n" +
+      "ENCRYPTION_PUBLIC_KEY={keys.encryptionKeyPair.publicKey}\n" +
+      "ENCRYPTION_PRIVATE_KEY={keys.encryptionKeyPair.privateKey}\n" +
+      "RPC=<please input rpc url here>\n" +
+      "# the following information is only included for convenience, it is not used by the delivery service\n" +
+      "# ENS_DOMAIN={ensDomain}\n" +
+      "# URL={url}\n" +
+      "# ACCOUNT_USED_FOR_KEY_CREATION={address}\n" +
+      "# MESSAGE_USED_FOR_KEY_CREATION={message}\n" +
+      "# PROFILE={JSON.stringify(profile)}\n";
+
+    const fileData = YAML.stringify(env);
     const blob = new Blob([fileData], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
+    const buttonUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.download = "dm3-delivery-service-profile_PUBLIC.yml";
-    link.href = url;
+    link.download = "dm3-delivery-service-environment";
+    link.href = buttonUrl;
     link.click();
   }
 
   function storeConfig() {
-    const config = { ...keys, ens: ensInput, rpc: url };
-    const fileData = YAML.stringify(config);
-    const blob = new Blob([fileData], { type: "text/plain" });
+    const configTemplate =
+      "# the delivery service configuration file" +
+      "\n" +
+      "# message time to live in seconds. The delivery service promises to keep the message for at least this long. \n" +
+      "# 15811200 is 6 months\n" +
+      "messageTTL: 15811200\n" +
+      "\n" +
+      "# the maximum size of a message in bytes, 10000000 is roughly 10MB \n" +
+      "sizeLimit: 10000000\n" +
+      "\n" +
+      "# uncomment the next block and replace all placeholders with your information in order to enable email notifications\n" +
+      "#notificationChannel:\n" +
+      "# - type: EMAIL\n" +
+      "#   config:\n" +
+      "#    smtpHost: <place your email provider's url here, e.g. smtp.gmail.com>\n" +
+      "#    smtpPort: <place your port here, default is 587>\n" +
+      "#    smtpEmail: <place the email address here>\n" +
+      "#    smtpUsername: <place your user name here>\n" +
+      "#    smtpPassword: <place your password here>\n";
+    const blob = new Blob([configTemplate], { type: "text/plain" });
     const buttonUrl = URL.createObjectURL(blob);
     const buttonLink = document.createElement("a");
-    buttonLink.download = "dm3-delivery-service-config_PRIVATE.yml";
+    buttonLink.download = "dm3-delivery-service-config.yml";
     buttonLink.href = buttonUrl;
     buttonLink.click();
   }
@@ -189,25 +222,26 @@ const App = () => {
             <p>
               ENS:
               <input onChange={(event) => handleEnsChange(event)}></input>
+              (the ens domain your delivery service will use, e.g.
+              myPersonalDeliveryService.eth)
             </p>
             <p>
               URL:
               <input onChange={(event) => handleUrlChange(event)}></input>
+              (the url your delivery service will use, e.g.
+              https://my-personal-delivery-service.com)
             </p>
             <div>
               <button disabled={!isConnected} onClick={createConfigAndProfile}>
-                Create config and profile
+                Create profile and .env
               </button>
             </div>
           </div>
           <div>
-            <h2>Step 2: store config and profile</h2>
-            <button disabled={!profileAndKeysCreated} onClick={storeProfile}>
-              Store profile file
-            </button>
-            {/* <p>{recoveredAddress.length > 0 ? recoveredAddress : ""}</p> */}
-            <button disabled={!profileAndKeysCreated} onClick={storeConfig}>
-              Store config
+            <h2>Step 2: store .env</h2>
+
+            <button disabled={!profileAndKeysCreated} onClick={storeEnv}>
+              Store .env
             </button>
           </div>
         </div>
@@ -215,19 +249,11 @@ const App = () => {
           <h2>Step 3: publish profile</h2>
           Now, please connect the account that controls the ENS domain so we can
           publish the profile.
-          {/* <p>Resolver: {ensResolverIsLoading ? "" : resolver}</p> */}
           <p>
-            Write contract state: {writeContractIsPending ? "pending" : "done"}
+            {profileAndKeysCreated && "Profile: " + JSON.stringify(profile)}
           </p>
           <p>
-            Profile:{" "}
-            {profileAndKeysCreated
-              ? JSON.stringify(profile)
-              : "Finish step 1 first"}
-            Keys:{" "}
-            {profileAndKeysCreated
-              ? JSON.stringify(keys)
-              : "Finish step 1 first"}
+            Write contract state: {writeContractIsPending ? "pending" : "done"}
           </p>
           <button
             disabled={!profileAndKeysCreated || !ensResolverFound}
@@ -237,10 +263,11 @@ const App = () => {
           </button>
           <p>{hash && hash}</p>
           <p>{writeContractError && JSON.stringify(writeContractError)}</p>
-          {/* <p>
-            load profile from file (optional):
-            <input type="file" />
-          </p> */}
+        </div>
+        <div>
+          <h2>Step 4: store config template</h2>
+          <p>{profileAndKeysCreated && "Keys: " + JSON.stringify(keys)}</p>
+          <button onClick={storeConfig}>Store config template</button>
         </div>
       </div>
     </RainbowKitProvider>
