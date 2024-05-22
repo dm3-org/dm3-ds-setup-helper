@@ -115,31 +115,55 @@ const App = () => {
       ens: ensDomain,
       url: url,
     });
+    const _keyCreationMessage =
+      "I am creating the seed for a dm3 delivery service profile by signing this message." +
+      dsEnsAndUrl;
     setKeyCreationMessage(
       "I am creating the seed for a dm3 delivery service profile by signing this message." +
         dsEnsAndUrl
     );
     signMessage({
-      message: keyCreationMessage,
+      message: _keyCreationMessage,
     });
   }
 
   function storeEnv() {
+    if (!keys) {
+      alert("keys are missing");
+      return;
+    }
     const env =
-      "SIGNING_PUBLIC_KEY={keys.signingKeyPair.publicKey}\n" +
-      "SIGNING_PRIVATE_KEY={keys.signingKeyPair.privateKey}\n" +
-      "ENCRYPTION_PUBLIC_KEY={keys.encryptionKeyPair.publicKey}\n" +
-      "ENCRYPTION_PRIVATE_KEY={keys.encryptionKeyPair.privateKey}\n" +
+      "SIGNING_PUBLIC_KEY=" +
+      keys.signingKeyPair.publicKey +
+      "\n" +
+      "SIGNING_PRIVATE_KEY=" +
+      keys.signingKeyPair.privateKey +
+      "\n" +
+      "ENCRYPTION_PUBLIC_KEY=" +
+      keys.encryptionKeyPair.publicKey +
+      "\n" +
+      "ENCRYPTION_PRIVATE_KEY=" +
+      keys.encryptionKeyPair.privateKey +
+      "\n" +
       "RPC=<please input rpc url here>\n" +
       "# the following information is only included for convenience, it is not used by the delivery service\n" +
-      "# ENS_DOMAIN={ensDomain}\n" +
-      "# URL={url}\n" +
-      "# ACCOUNT_USED_FOR_KEY_CREATION={address}\n" +
-      "# MESSAGE_USED_FOR_KEY_CREATION={message}\n" +
-      "# PROFILE={JSON.stringify(profile)}\n";
+      "# ENS_DOMAIN=" +
+      ensDomain +
+      "\n" +
+      "# URL=" +
+      url +
+      "\n" +
+      "# ACCOUNT_USED_FOR_KEY_CREATION=" +
+      address +
+      "\n" +
+      "# MESSAGE_USED_FOR_KEY_CREATION=" +
+      keyCreationMessage +
+      "\n" +
+      "# PROFILE=" +
+      JSON.stringify(profile) +
+      "\n";
 
-    const fileData = YAML.stringify(env);
-    const blob = new Blob([fileData], { type: "text/plain" });
+    const blob = new Blob([env], { type: "text/plain" });
     const buttonUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.download = "dm3-delivery-service-environment";
