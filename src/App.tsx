@@ -1,7 +1,15 @@
 import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
 import { recoverMessageAddress } from "viem";
-import { useAccount, useSignMessage } from "wagmi";
+import { normalize, namehash } from "viem/ens";
+import {
+  useAccount,
+  useSignMessage,
+  useEnsResolver,
+  useTransactionCount,
+  useWriteContract,
+  useReadContract,
+} from "wagmi";
 import {
   createKeyPair,
   createSigningKeyPair,
@@ -12,22 +20,55 @@ import {
   DeliveryServiceProfileKeys,
 } from "@dm3-org/dm3-lib-profile";
 import * as YAML from "yaml";
+import { resolverAbi } from "./resolverAbi";
 
 const App = () => {
-  const [ens, setEns] = useState("ens");
+  const [ensInput, setEnsInput] = useState("");
+  const [ensDomain, setEnsDomain] = useState("");
   const [url, setUrl] = useState("url");
   const [profile, setProfile] = useState<DeliveryServiceProfile>();
   const [keys, setKeys] = useState<DeliveryServiceProfileKeys>();
   const [profileAndKeysCreated, setProfileAndKeysCreated] = useState(false);
   const [signature, setSignature] = useState("");
   const [recoveredAddress, setRecoveredAddress] = useState("");
+  const [ensResolverFound, setEnsResolverFound] = useState(false);
+  const [resolver, setResolver] = useState("");
   const { isConnected, address } = useAccount();
+  const {
+    data: transactionCountInput,
+    isFetched: transactionCountInputIsFetched,
+  } = useTransactionCount({ address });
+  const [transactionCount, setTransactionCount] = useState(0);
   const {
     data: signMessageData,
     error,
     signMessage,
     variables,
   } = useSignMessage();
+  const {
+    data: ensResolver,
+    isError,
+    isLoading: ensResolverIsLoading,
+  } = useEnsResolver({ name: normalize(ensDomain) });
+  const { data: hash, writeContract } = useWriteContract();
+
+  useEffect(() => {}, [address]);
+
+  useEffect(() => {
+    if (isError && !ensResolverIsLoading) {
+      console.log("error: ", error);
+      setEnsResolverFound(false);
+    }
+    if (
+      !isError &&
+      !ensResolverIsLoading &&
+      ensResolver != "0x0000000000000000000000000000000000000000"
+    ) {
+      console.log("ens resolver found: ", ensResolver);
+      setEnsResolverFound(true);
+      setResolver(String(ensResolver));
+    }
+  }, [ensResolver, isError, ensResolverIsLoading]);
 
   useEffect(() => {
     (async () => {
@@ -61,18 +102,10 @@ const App = () => {
     })();
   }, [signMessageData, variables?.message]);
 
-  //const { data: signer } = useSigner();
-
-  // useEffect(() => {
-  //   const message = "3b973794ddCA0530D27f2737C989F63307253Ca2";
-  //   const signature = signMessageAsync({ message: "Hello World!" });
-  //   console.log(signature);
-  // });
-
   const handleEnsChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    setEns(event.target.value);
+    setEnsInput(event.target.value);
   };
 
   const handleUrlChange = (
@@ -82,8 +115,10 @@ const App = () => {
   };
 
   function createConfigAndProfile() {
+    // todo: check if ens is valid
+    setEnsDomain(ensInput);
     const dsEnsAndUrl = JSON.stringify({
-      ens: ens,
+      ens: ensDomain,
       url: url,
     });
     signMessage({
@@ -104,7 +139,7 @@ const App = () => {
   }
 
   function storeConfig() {
-    const config = { ...keys, ens: ens, rpc: url };
+    const config = { ...keys, ens: ensInput, rpc: url };
     const fileData = YAML.stringify(config);
     const blob = new Blob([fileData], { type: "text/plain" });
     const buttonUrl = URL.createObjectURL(blob);
@@ -115,7 +150,29 @@ const App = () => {
   }
 
   function publishProfile() {
-    alert(`Will publish profile to the blockchain!`);
+    if (ensResolver) {
+      // console.log("checking ens domain controller");
+      // const { data: balance } = useReadContract({
+      //   ...wagmiContractConfig,
+      //   functionName: "balanceOf",
+      //   args: ["0x03A71968491d55603FFe1b11A9e23eF013f75bCF"],
+      // });
+      console.log("publishing profile");
+      writeContract({
+        address: ensResolver,
+        abi: resolverAbi,
+        functionName: "setText",
+        args: [
+          namehash(ensDomain),
+          "network.dm3.deliveryService",
+          JSON.stringify(profile),
+        ],
+      });
+      console.log("published profile");
+      console.log("transaction hash: ", hash);
+    } else {
+      alert(`ensResolver is missing`);
+    }
   }
 
   return (
@@ -145,7 +202,7 @@ const App = () => {
               <input onChange={(event) => handleUrlChange(event)}></input>
             </p>
             <div>
-              <button onClick={createConfigAndProfile}>
+              <button disabled={!isConnected} onClick={createConfigAndProfile}>
                 Create config and profile
               </button>
             </div>
@@ -165,6 +222,7 @@ const App = () => {
           <h2>Step 3: publish profile</h2>
           Now, please connect the account that controls the ENS domain so we can
           publish the profile.
+          {/* <p>Resolver: {ensResolverIsLoading ? "" : resolver}</p> */}
           <p>
             Profile:{" "}
             {profileAndKeysCreated
@@ -175,9 +233,17 @@ const App = () => {
               ? JSON.stringify(keys)
               : "Finish step 1 first"}
           </p>
-          <button disabled={!profileAndKeysCreated} onClick={publishProfile}>
+          <button
+            disabled={
+              !profileAndKeysCreated ||
+              !ensResolverFound ||
+              !transactionCountInputIsFetched
+            }
+            onClick={publishProfile}
+          >
             Publish profile
           </button>
+          <p>{hash && hash}</p>
           {/* <p>
             load profile from file (optional):
             <input type="file" />
