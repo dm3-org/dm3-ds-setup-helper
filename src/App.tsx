@@ -9,7 +9,6 @@ import {
 } from "@dm3-org/dm3-lib-profile";
 import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
-import { recoverMessageAddress } from "viem";
 import { namehash, normalize } from "viem/ens";
 import {
   useAccount,
