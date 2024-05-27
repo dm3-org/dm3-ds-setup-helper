@@ -23,7 +23,8 @@ import { resolverAbi } from "./resolverAbi";
 const App = () => {
   const [ensInput, setEnsInput] = useState("");
   const [ensDomain, setEnsDomain] = useState("");
-  const [url, setUrl] = useState("url");
+  const [url, setUrl] = useState("");
+  const [rpc, setRpc] = useState("");
   const [profile, setProfile] = useState<DeliveryServiceProfile>();
   const [keys, setKeys] = useState<DeliveryServiceProfileKeys>();
   const [profileAndKeysCreated, setProfileAndKeysCreated] = useState(false);
@@ -108,6 +109,12 @@ const App = () => {
     setUrl(event.target.value);
   };
 
+  const handleRpcChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setRpc(event.target.value);
+  };
+
   function createConfigAndProfile() {
     // todo: check if ens is valid
     setEnsDomain(ensInput);
@@ -145,7 +152,9 @@ const App = () => {
       "ENCRYPTION_PRIVATE_KEY=" +
       keys.encryptionKeyPair.privateKey +
       "\n" +
-      "RPC=<please input rpc url here>\n" +
+      "RPC=" +
+      rpc +
+      "\n" +
       "# the following information is only included for convenience, it is not used by the delivery service\n" +
       "# ENS_DOMAIN=" +
       ensDomain +
@@ -254,6 +263,12 @@ const App = () => {
               <input onChange={(event) => handleUrlChange(event)}></input>
               (the url your delivery service will use, e.g.
               https://my-personal-delivery-service.com)
+            </p>
+            <p>
+              RPC:
+              <input onChange={(event) => handleRpcChange(event)}></input>
+              (the rpc url your delivery service will use, e.g.
+              https://mainnet.infura.io/v3/f02ijf0283i0jq0jdoisjd07829)
             </p>
             <div>
               <button disabled={!isConnected} onClick={createConfigAndProfile}>
