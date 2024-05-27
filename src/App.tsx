@@ -17,7 +17,6 @@ import {
   useSignMessage,
   useWriteContract,
 } from "wagmi";
-import * as YAML from "yaml";
 import { resolverAbi } from "./resolverAbi";
 
 const App = () => {
@@ -59,22 +58,16 @@ const App = () => {
     if (
       !isError &&
       !ensResolverIsLoading &&
-      ensResolver != "0x0000000000000000000000000000000000000000"
+      ensResolver !== "0x0000000000000000000000000000000000000000"
     ) {
       console.log("ens resolver found: ", ensResolver);
       setEnsResolverFound(true);
     }
-  }, [ensResolver, isError, ensResolverIsLoading]);
+  }, [ensResolver, isError, ensResolverIsLoading, error]);
 
   useEffect(() => {
     (async () => {
       if (variables?.message && signMessageData) {
-        const signature = signMessageData;
-        const recoveredAddress = await recoverMessageAddress({
-          message: variables?.message,
-          signature: signature,
-        });
-
         const keys: DeliveryServiceProfileKeys = {
           encryptionKeyPair: await createKeyPair(
             await createStorageKey(signMessageData)
@@ -95,7 +88,7 @@ const App = () => {
         setProfileAndKeysCreated(true);
       }
     })();
-  }, [signMessageData, variables?.message]);
+  }, [signMessageData, variables?.message, url]);
 
   const handleEnsChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
