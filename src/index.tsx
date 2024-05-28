@@ -1,21 +1,14 @@
+import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
-import "./polyfills";
-import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
-import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  sepolia,
-} from "wagmi/chains";
+import { mainnet, optimism, sepolia } from "wagmi/chains";
+import "./index.css";
+import "./polyfills";
 
-import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import App from "./App";
 
 const config = getDefaultConfig({
   appName: "RainbowKit demo",
