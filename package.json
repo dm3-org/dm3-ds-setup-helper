@@ -1,6 +1,7 @@
 {
-  "name": "with-create-react-app",
+  "name": "dm3-delivery-service-setup-helper",
   "version": "0.1.86",
+  "homepage": "https://dm3-org.github.io/dm3-ds-setup-helper/",
   "private": true,
   "dependencies": {
     "@dm3-org/dm3-lib-crypto": "^1.3.0",
@@ -30,9 +31,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --transformIgnorePatterns \"node_modules/(?!@rainbow-me)/\"",
-    "eject": "react-scripts eject",
-    "predeploy": "pnpm install && pnpm build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
