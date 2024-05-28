@@ -78,6 +78,9 @@ importers:
       react-app-rewired:
         specifier: ^2.2.1
         version: 2.2.1(react-scripts@5.0.1(@babel/plugin-syntax-flow@7.24.6(@babel/core@7.24.6))(@babel/plugin-transform-react-jsx@7.24.6(@babel/core@7.24.6))(@types/babel__core@7.20.5)(bufferutil@4.0.8)(eslint@8.57.0)(react@18.3.1)(type-fest@0.21.3)(typescript@5.4.2))
+      stream-browserify:
+        specifier: ^3.0.0
+        version: 3.0.0
 
 packages:
 
@@ -6854,6 +6857,9 @@ packages:
   stop-iteration-iterator@1.0.0:
     resolution: {integrity: sha512-iCGQj+0l0HOdZ2AEeBADlsRC+vsnDsZsbdSiH1yNSjcfKM7fdpCMfqAL/dwF5BLiw/XhRft/Wax6zQbhq2BcjQ==}
     engines: {node: '>= 0.4'}
+
+  stream-browserify@3.0.0:
+    resolution: {integrity: sha512-H73RAHsVBapbim0tU2JwwOiXUj+fikfiaoYAKHF3VJfA0pe2BCzkhAHBlLG6REzE+2WNZcxOXjK7lkso+9euLA==}
 
   stream-shift@1.0.3:
     resolution: {integrity: sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==}
@@ -16717,6 +16723,11 @@ snapshots:
   stop-iteration-iterator@1.0.0:
     dependencies:
       internal-slot: 1.0.7
+
+  stream-browserify@3.0.0:
+    dependencies:
+      inherits: 2.0.4
+      readable-stream: 3.6.2
 
   stream-shift@1.0.3: {}
 
