@@ -19,6 +19,10 @@ import {
 import { resolverAbi } from "./resolverAbi";
 
 const App = () => {
+  const CONFIG_FILE_NAME = "config.yml";
+  const ENV_FILE_NAME = ".env";
+  const DOCKER_COMPOSE_DOWNLOAD_URL =
+    "https://raw.githubusercontent.com/dm3-org/dm3/develop/docker/ds-minimal/docker-compose.yml";
   const [ensInput, setEnsInput] = useState("");
   const [ensDomain, setEnsDomain] = useState("");
   const [url, setUrl] = useState("");
@@ -167,7 +171,7 @@ const App = () => {
     const blob = new Blob([env], { type: "text/plain" });
     const buttonUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.download = "dm3-delivery-service-environment";
+    link.download = ENV_FILE_NAME;
     link.href = buttonUrl;
     link.click();
   }
@@ -195,7 +199,7 @@ const App = () => {
     const blob = new Blob([configTemplate], { type: "text/plain" });
     const buttonUrl = URL.createObjectURL(blob);
     const buttonLink = document.createElement("a");
-    buttonLink.download = "dm3-delivery-service-config.yml";
+    buttonLink.download = CONFIG_FILE_NAME;
     buttonLink.href = buttonUrl;
     buttonLink.click();
   }
@@ -241,6 +245,12 @@ const App = () => {
         <div>
           <h1>Welcome {address}</h1>
           <div>
+            This web app will help you to set up a dm3 delivery service. You can
+            do steps 1 and 2 (generating and saving your keys) offline. The last
+            steps need an internet connection, as they execute a transaction on
+            the ethereum blockchain and download stuff.{" "}
+          </div>
+          <div>
             <h2>Step 1: create config and profile</h2>
             To create the profile and config file, please connect the account
             the delivery service will use. Also, we need this information:
@@ -269,11 +279,11 @@ const App = () => {
             </div>
           </div>
           <div>
-            <h2>Step 2: store .env</h2>
-
+            <h2>Step 2: store .env and config.yml</h2>
             <button disabled={!profileAndKeysCreated} onClick={storeEnv}>
               Store .env
-            </button>
+            </button>{" "}
+            <button onClick={storeConfig}>Store default config</button>
           </div>
         </div>
         <div>
@@ -296,9 +306,37 @@ const App = () => {
           <p>{writeContractError && JSON.stringify(writeContractError)}</p>
         </div>
         <div>
-          <h2>Step 4: store config template</h2>
-          <p>{profileAndKeysCreated && "Keys: " + JSON.stringify(keys)}</p>
-          <button onClick={storeConfig}>Store config template</button>
+          <h2>Step 4: </h2>
+          <ol>
+            <li>
+              Download{" "}
+              <a href={DOCKER_COMPOSE_DOWNLOAD_URL} target="_blank">
+                the docker compose file
+              </a>{" "}
+              and save it as docker-compose.yml
+            </li>
+            <li>
+              move all 3 files (docker-compose.yml, .env, config.yml) into a
+              directory on the machine you want to run the service on (e.g. a
+              web server)
+            </li>
+            <li>
+              in this directory, execute `docker-compose up -d` to start the
+              delivery service
+            </li>
+            <li>
+              visit &lt;yourUrl&gt;:8083/hello with your web browser to get a
+              first friendly response from your delivery service
+            </li>
+          </ol>
+        </div>
+        <div>
+          Info: This tool is provided as is under the{" "}
+          <a href="https://github.com/dm3-org/dm3-ds-setup-helper/blob/main/LICENSE">
+            BSD 2-Clause License
+          </a>
+          . You can find the source code, open issues and contribute{" "}
+          <a href="https://github.com/dm3-org/dm3-ds-setup-helper">here.</a>{" "}
         </div>
       </div>
     </RainbowKitProvider>

@@ -11,7 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 
 const config = getDefaultConfig({
-  appName: "RainbowKit demo",
+  appName: "DM3 delivery service setup helper",
   projectId: "YOUR_PROJECT_ID",
   chains: [mainnet, optimism, sepolia],
 });
