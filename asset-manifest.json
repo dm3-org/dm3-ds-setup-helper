@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/dm3-ds-setup-helper/static/css/main.e0be3b4c.css",
-    "main.js": "/dm3-ds-setup-helper/static/js/main.c2965825.js",
+    "main.js": "/dm3-ds-setup-helper/static/js/main.18b8711f.js",
     "static/js/7330.52f02da4.chunk.js": "/dm3-ds-setup-helper/static/js/7330.52f02da4.chunk.js",
     "static/js/6692.e4550bda.chunk.js": "/dm3-ds-setup-helper/static/js/6692.e4550bda.chunk.js",
     "static/js/2063.aa88acb1.chunk.js": "/dm3-ds-setup-helper/static/js/2063.aa88acb1.chunk.js",
@@ -65,7 +65,7 @@
     "static/js/6937.a7d0fda4.chunk.js": "/dm3-ds-setup-helper/static/js/6937.a7d0fda4.chunk.js",
     "index.html": "/dm3-ds-setup-helper/index.html",
     "main.e0be3b4c.css.map": "/dm3-ds-setup-helper/static/css/main.e0be3b4c.css.map",
-    "main.c2965825.js.map": "/dm3-ds-setup-helper/static/js/main.c2965825.js.map",
+    "main.18b8711f.js.map": "/dm3-ds-setup-helper/static/js/main.18b8711f.js.map",
     "7330.52f02da4.chunk.js.map": "/dm3-ds-setup-helper/static/js/7330.52f02da4.chunk.js.map",
     "2063.aa88acb1.chunk.js.map": "/dm3-ds-setup-helper/static/js/2063.aa88acb1.chunk.js.map",
     "8002.15b3001d.chunk.js.map": "/dm3-ds-setup-helper/static/js/8002.15b3001d.chunk.js.map",
@@ -128,6 +128,6 @@
   },
   "entrypoints": [
     "static/css/main.e0be3b4c.css",
-    "static/js/main.c2965825.js"
+    "static/js/main.18b8711f.js"
   ]
 }
