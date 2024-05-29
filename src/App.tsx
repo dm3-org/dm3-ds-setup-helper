@@ -310,7 +310,11 @@ const App = () => {
           <ol>
             <li>
               Download{" "}
-              <a href={DOCKER_COMPOSE_DOWNLOAD_URL} target="_blank">
+              <a
+                href={DOCKER_COMPOSE_DOWNLOAD_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
                 the docker compose file
               </a>{" "}
               and save it as docker-compose.yml
