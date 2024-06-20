@@ -1,15 +1,21 @@
 import { DOCKER_COMPOSE_DOWNLOAD_URL } from "../utils/constants";
 
-export function Docker() {
+interface DockerProps {
+    downloadDockerFile: () => void;
+}
+
+export function Docker(props: DockerProps) {
+
     return <div>
         <h2>Step 4: </h2>
         <ol>
             <li>
-                Download{" "}
+                Download {" "}
                 <a
                     href={DOCKER_COMPOSE_DOWNLOAD_URL}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={props.downloadDockerFile}
                 >
                     the docker compose file
                 </a>{" "}
