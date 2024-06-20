@@ -11,8 +11,8 @@ import { Env } from "./Env";
 const App = () => {
 
   const { address, isConnected, handleEnsChange, handleRpcChange, handleUrlChange, createConfigAndProfile,
-    profileAndKeysCreated, storeEnv, storeConfig, profile, writeContractIsPending, publishProfile,
-    ensResolverFound, hash, writeContractError, downloadDockerFile } = useConfiguration();
+    profileAndKeysCreated, storeEnv, profile, writeContractIsPending, publishProfile,
+    ensResolverFound, hash, writeContractError } = useConfiguration();
 
   return (
     <div className="ds-container">
@@ -36,7 +36,6 @@ const App = () => {
         <Env
           profileAndKeysCreated={profileAndKeysCreated}
           storeEnv={storeEnv}
-          storeConfig={storeConfig}
         />
       </div>
       <PublishProfile
@@ -48,7 +47,7 @@ const App = () => {
         writeContractError={writeContractError}
         writeContractIsPending={writeContractIsPending}
       />
-      <Docker downloadDockerFile={downloadDockerFile} />
+      <Docker />
       <Info />
     </div>
   );

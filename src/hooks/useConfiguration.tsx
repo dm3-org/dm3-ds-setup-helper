@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { namehash, normalize } from "viem/ens";
 import { resolverAbi } from "../utils/resolverAbi";
 import { configureEnv } from "../utils/configureEnv";
-import { configurationTemplate } from "../utils/configurationTemplate";
 import { useAccount, useEnsResolver, useSignMessage, useWriteContract } from "wagmi";
 import { DeliveryServiceProfile, DeliveryServiceProfileKeys } from "@dm3-org/dm3-lib-profile";
 import { createKeyPair, createSigningKeyPair, createStorageKey } from "@dm3-org/dm3-lib-crypto";
-import { CONFIG_FILE_NAME, DELIVERY_SERVICE, DOCKER_COMPOSE_DOWNLOAD_URL, ENV_FILE_NAME, KEY_CREATION_MESSAGE, ZERO_ADDRESS } from "../utils/constants";
-import axios from "axios";
+import { DELIVERY_SERVICE, ENV_FILE_NAME, KEY_CREATION_MESSAGE, ZERO_ADDRESS } from "../utils/constants";
 
 export const useConfiguration = () => {
 
@@ -92,15 +90,6 @@ export const useConfiguration = () => {
         link.click();
     }
 
-    const storeConfig = () => {
-        const blob = new Blob([configurationTemplate], { type: "text/plain" });
-        const buttonUrl = URL.createObjectURL(blob);
-        const buttonLink = document.createElement("a");
-        buttonLink.download = CONFIG_FILE_NAME;
-        buttonLink.href = buttonUrl;
-        buttonLink.click();
-    }
-
     const publishProfile = () => {
         if (ensResolver) {
             // console.log("checking ens domain controller");
@@ -124,32 +113,6 @@ export const useConfiguration = () => {
             console.log("transaction hash: ", hash);
         } else {
             alert(`ensResolver is missing`);
-        }
-    }
-
-    const downloadDockerFile = async () => {
-        try {
-            // file name which will get download
-            const fileName = "docker-compose.yml";
-            // fetch the content of the file through the link
-            const response = await axios.get(DOCKER_COMPOSE_DOWNLOAD_URL);
-            // sets the content of the file
-            const text = response.data;
-            // creates a link to download file
-            const element = document.createElement('a');
-            // sets attributes for link
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-            element.setAttribute('download', fileName);
-            // style is set to none as it is not to be displayed on UI
-            element.style.display = 'none';
-            // appends link to DOM to download file
-            document.body.appendChild(element);
-            // downloads file
-            element.click();
-            // removes link after file is downloaded
-            document.body.removeChild(element);
-        } catch (error) {
-            console.error("Failed to download file : ", error);
         }
     }
 
@@ -204,14 +167,12 @@ export const useConfiguration = () => {
         createConfigAndProfile,
         profileAndKeysCreated,
         storeEnv,
-        storeConfig,
         profile,
         writeContractIsPending,
         ensResolverFound,
         publishProfile,
         hash,
         writeContractError,
-        downloadDockerFile
     };
 
 }
