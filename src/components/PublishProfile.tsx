@@ -12,7 +12,7 @@ interface PublishProfileProps {
 
 export default function PublishProfile(props: PublishProfileProps) {
     return <div>
-        <h2>Step 3: publish profile</h2>
+        <h2>Step 3: Publish profile</h2>
         Now, please connect the account that controls the ENS domain so we can
         publish the profile.
         <p>

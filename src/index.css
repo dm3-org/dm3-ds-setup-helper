@@ -25,6 +25,27 @@ body {
   justify-content: flex-end;
 }
 
-.ds-container{
+.ds-container {
   padding: 1rem;
+}
+
+.config-profile-para {
+  margin-bottom: 0.3rem;
+}
+
+.error {
+  color: #C30F1A;
+  font-size: 14px;
+}
+
+.env-btn {
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.mandatory {
+  color: #C30F1A;
+  font-size: 14px;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
 }
