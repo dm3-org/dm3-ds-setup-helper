@@ -30,7 +30,7 @@ const validateRpc = (rpc: string, setRpcError: Function): boolean => {
         const validatedUrl = new URL(rpc);
 
         if (validatedUrl.protocol !== "https:") {
-            setRpcError("RPC endpoint must be https");
+            setRpcError("RPC endpoint must start with https");
             return false;
         }
 
@@ -50,7 +50,7 @@ const validateUrl = (url: string, setUrlError: Function): boolean => {
         const validatedUrl = new URL(url);
 
         if (validatedUrl.protocol !== "https:") {
-            setUrlError("URL endpoint must be https");
+            setUrlError("URL endpoint must start with https");
             return false;
         }
 
