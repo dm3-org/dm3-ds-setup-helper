@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { namehash, normalize } from "viem/ens";
 import { resolverAbi } from "../utils/resolverAbi";
 import { configureEnv } from "../utils/configureEnv";
+import { areAllPropertiesValid } from "../utils/ensUtils";
 import { useAccount, useChainId, useEnsResolver, useSignMessage, useWriteContract } from "wagmi";
 import { DeliveryServiceProfile, DeliveryServiceProfileKeys } from "@dm3-org/dm3-lib-profile";
 import { createKeyPair, createSigningKeyPair, createStorageKey } from "@dm3-org/dm3-lib-crypto";
 import { DELIVERY_SERVICE, ENV_FILE_NAME, KEY_CREATION_MESSAGE, ZERO_ADDRESS } from "../utils/constants";
-import { areAllPropertiesValid } from "../utils/ensUtils";
-import { ethers } from "ethers";
 
 export const useConfiguration = () => {
 
@@ -16,8 +15,6 @@ export const useConfiguration = () => {
 
     const [url, setUrl] = useState<string>("");
     const [rpc, setRpc] = useState<string>("");
-
-    const [provider, setProvider] = useState<any>(null);
 
     const [keys, setKeys] = useState<DeliveryServiceProfileKeys>();
     const [profile, setProfile] = useState<DeliveryServiceProfile>();
@@ -30,9 +27,8 @@ export const useConfiguration = () => {
     const [urlError, setUrlError] = useState<string | null>(null);
     const [rpcError, setRpcError] = useState<string | null>(null);
 
+    const chainId = useChainId();
     const { isConnected, address, connector } = useAccount();
-
-    const chainConnected = useChainId();
 
     const {
         data: signMessageData,
@@ -77,7 +73,7 @@ export const useConfiguration = () => {
 
     const createConfigAndProfile = async () => {
         const isValid = await areAllPropertiesValid(ensInput, setEnsError, rpc, setRpcError, url,
-            setUrlError, address as string, provider);
+            setUrlError, address as string, chainId);
         if (!isValid) {
             return;
         }
@@ -133,25 +129,15 @@ export const useConfiguration = () => {
         }
     }
 
-    const initializeProvider = () => {
-        if (chainConnected === 11155111) {
-            const sepoliaProvider = new ethers.JsonRpcProvider(url, {
-                name: 'sepolia',
-                chainId: 11155111,
-                ensAddress: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
-            });
-            setProvider(sepoliaProvider);
-        } else {
-            const mainnetProvider = new ethers.JsonRpcProvider(url, {
-                name: 'mainnet',
-                chainId: 1,
-            });
-            setProvider(mainnetProvider);
-        }
-    }
-
+    // clears all input field & error on change of account
     useEffect(() => {
-        initializeProvider();
+        console.log("Account changed : ", address);
+        setEnsInput("");
+        setRpc("");
+        setUrl("");
+        setEnsError(null);
+        setRpcError(null);
+        setUrlError(null);
     }, [address]);
 
     useEffect(() => {
@@ -212,7 +198,10 @@ export const useConfiguration = () => {
         ensError,
         urlError,
         rpcError,
-        connector
+        connector,
+        ensInput,
+        url,
+        rpc
     };
 
 }
