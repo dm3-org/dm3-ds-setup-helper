@@ -1,7 +1,8 @@
+import { storeConfig } from "../utils/fileUtils";
+
 interface EnvProps {
     profileAndKeysCreated: boolean,
     storeEnv: () => void,
-    storeConfig: () => void,
 }
 
 export function Env(props: EnvProps) {
@@ -10,6 +11,6 @@ export function Env(props: EnvProps) {
         <button disabled={!props.profileAndKeysCreated} onClick={props.storeEnv}>
             Store .env
         </button>{" "}
-        <button onClick={props.storeConfig}>Store default config</button>
+        <button onClick={storeConfig}>Store default config</button>
     </div>
 }

@@ -9,6 +9,22 @@ body {
 
 .main-container {
   display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ds-title {
+  display: flex;
+  justify-content: center;
+  flex: 1 0 50%;
+}
+
+.connect-btn {
+  display: flex;
   justify-content: flex-end;
-  padding: 12,
+}
+
+.ds-container{
+  padding: 1rem;
 }

@@ -12,5 +12,5 @@ export const GITHUB_LICENSE = "https://github.com/dm3-org/dm3-ds-setup-helper/bl
 
 export const KEY_CREATION_MESSAGE = "I am creating the seed for a dm3 delivery service profile by signing this message.";
 
-export const DOCKER_COMPOSE_DOWNLOAD_URL = "https://raw.githubusercontent.com/dm3-org/dm3/develop/docker/ds-minimal/docker-compose.yml";
+export const DOCKER_COMPOSE_DOWNLOAD_URL = "https://raw.githubusercontent.com/dm3-org/dm3/main/docker/ds-minimal/docker-compose.yml";
 

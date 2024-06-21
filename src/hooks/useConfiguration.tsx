@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { namehash, normalize } from "viem/ens";
 import { resolverAbi } from "../utils/resolverAbi";
 import { configureEnv } from "../utils/configureEnv";
-import { configurationTemplate } from "../utils/configurationTemplate";
 import { useAccount, useEnsResolver, useSignMessage, useWriteContract } from "wagmi";
 import { DeliveryServiceProfile, DeliveryServiceProfileKeys } from "@dm3-org/dm3-lib-profile";
 import { createKeyPair, createSigningKeyPair, createStorageKey } from "@dm3-org/dm3-lib-crypto";
-import { CONFIG_FILE_NAME, DELIVERY_SERVICE, ENV_FILE_NAME, KEY_CREATION_MESSAGE, ZERO_ADDRESS } from "../utils/constants";
+import { DELIVERY_SERVICE, ENV_FILE_NAME, KEY_CREATION_MESSAGE, ZERO_ADDRESS } from "../utils/constants";
 
 export const useConfiguration = () => {
 
@@ -63,7 +62,7 @@ export const useConfiguration = () => {
         setRpc(event.target.value);
     };
 
-    function createConfigAndProfile() {
+    const createConfigAndProfile = () => {
         // todo: check if ens is valid
         setEnsDomain(ensInput);
         const dsEnsAndUrl = JSON.stringify({
@@ -75,7 +74,7 @@ export const useConfiguration = () => {
         signMessage({ message: _keyCreationMessage });
     }
 
-    function storeEnv() {
+    const storeEnv = () => {
         if (!keys) {
             alert("keys are missing");
             return;
@@ -91,16 +90,7 @@ export const useConfiguration = () => {
         link.click();
     }
 
-    function storeConfig() {
-        const blob = new Blob([configurationTemplate], { type: "text/plain" });
-        const buttonUrl = URL.createObjectURL(blob);
-        const buttonLink = document.createElement("a");
-        buttonLink.download = CONFIG_FILE_NAME;
-        buttonLink.href = buttonUrl;
-        buttonLink.click();
-    }
-
-    function publishProfile() {
+    const publishProfile = () => {
         if (ensResolver) {
             // console.log("checking ens domain controller");
             // const { data: balance } = useReadContract({
@@ -177,13 +167,12 @@ export const useConfiguration = () => {
         createConfigAndProfile,
         profileAndKeysCreated,
         storeEnv,
-        storeConfig,
         profile,
         writeContractIsPending,
         ensResolverFound,
         publishProfile,
         hash,
-        writeContractError
+        writeContractError,
     };
 
 }

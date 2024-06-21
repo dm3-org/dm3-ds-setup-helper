@@ -11,13 +11,18 @@ import { Env } from "./Env";
 const App = () => {
 
   const { address, isConnected, handleEnsChange, handleRpcChange, handleUrlChange, createConfigAndProfile,
-    profileAndKeysCreated, storeEnv, storeConfig, profile, writeContractIsPending, publishProfile,
+    profileAndKeysCreated, storeEnv, profile, writeContractIsPending, publishProfile,
     ensResolverFound, hash, writeContractError } = useConfiguration();
 
   return (
-    <div>
+    <div className="ds-container">
       <div className="main-container">
-        <ConnectButton />
+        <h1 className="ds-title">
+          DM3 Delivery Service Setup Helper
+        </h1>
+        <div className="connect-btn">
+          <ConnectButton />
+        </div>
       </div>
       <div>
         <Welcome address={address} />
@@ -31,7 +36,6 @@ const App = () => {
         <Env
           profileAndKeysCreated={profileAndKeysCreated}
           storeEnv={storeEnv}
-          storeConfig={storeConfig}
         />
       </div>
       <PublishProfile
