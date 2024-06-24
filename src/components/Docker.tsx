@@ -3,9 +3,9 @@ import { DOCKER_COMPOSE_DOWNLOAD_URL } from "../utils/constants";
 
 export function Docker() {
 
-    return <div>
-        <h2>Step 4: </h2>
-        <ol>
+    return <div className="steps-container step">
+        <h2 className="heading-text">Step 4: Dockerize</h2>
+        <ol className="description-text">
             <li>
                 Download {" "}
                 <a

@@ -7,7 +7,7 @@ import ReactDOM from "react-dom/client";
 import "@rainbow-me/rainbowkit/styles.css";
 import { mainnet, optimism, sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { darkTheme, getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
 const config = getDefaultConfig({
   appName: "DM3 delivery service setup helper",
@@ -25,7 +25,9 @@ root.render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
+        <RainbowKitProvider theme={darkTheme({
+          accentColor: '#7b3fe4',
+        })}>
           <App />
         </RainbowKitProvider>
       </QueryClientProvider>
