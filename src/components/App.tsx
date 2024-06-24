@@ -12,7 +12,8 @@ const App = () => {
 
   const { address, isConnected, handleEnsChange, handleRpcChange, handleUrlChange, createConfigAndProfile,
     profileAndKeysCreated, storeEnv, profile, writeContractIsPending, publishProfile,
-    ensResolverFound, hash, writeContractError } = useConfiguration();
+    ensResolverFound, hash, writeContractError, ensError, rpcError, urlError,
+    ensInput, rpc, url } = useConfiguration();
 
   return (
     <div className="ds-container">
@@ -30,6 +31,12 @@ const App = () => {
           handleEnsChange={handleEnsChange}
           handleUrlChange={handleUrlChange}
           handleRpcChange={handleRpcChange}
+          ens={ensInput}
+          url={url}
+          rpc={rpc}
+          ensError={ensError}
+          rpcError={rpcError}
+          urlError={urlError}
           createConfigAndProfile={createConfigAndProfile}
           isConnected={isConnected}
         />
