@@ -25,6 +25,8 @@ jobs:
         run: |
           pnpm install
           pnpm run build
+        env:
+          REACT_APP_WALLET_CONNECT_PROJECT_ID: ${{ secrets.REACT_APP_WALLET_CONNECT_PROJECT_ID }}
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
