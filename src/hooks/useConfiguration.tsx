@@ -221,7 +221,7 @@ export const useConfiguration = () => {
         setProfile(undefined);
         setKeys(undefined);
         reset();
-    }, [address]);
+    }, [address, reset]);
 
     useEffect(() => {
         if (isError && !ensResolverIsLoading) {
@@ -263,7 +263,7 @@ export const useConfiguration = () => {
                 setUserEns(ensInput);
             }
         })();
-    }, [signMessageData, variables?.message, url]);
+    }, [signMessageData, variables?.message, url, ensInput]);
 
     return {
         address,
