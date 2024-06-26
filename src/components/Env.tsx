@@ -8,10 +8,10 @@ interface EnvProps {
 export function Env(props: EnvProps) {
     return <div className="step description-text">
 
-        <h2 className="heading-text">Step 2: Store .env and config.yml</h2>
+        <h2 className="heading-text">Step 2: Store dm3-ds.env and config.yml</h2>
 
         <p>
-            Please download both .env file & config.yml file by clicking below buttons and keep it securely with you.
+            Please download both dm3-ds.env file & config.yml file by clicking below buttons and keep it securely with you.
             Both the files are needed in step 4.
         </p>
 

@@ -20,7 +20,7 @@ export function ConfigureProfile(props: ConfigureProfileProps) {
 
     const [showSuccessMsg, setShowSuccessMsg] = useState<boolean>(false);
 
-    const isDisabled = (!props.isConnected || !props.ens.length || !props.url.length || !props.rpc.length)
+    const isDisabled = (!props.isConnected || !props.ens.length || !props.url.length)
         ? true : false;
 
     // show success message of profile creation for 3 seconds & then clears the msg from UI
@@ -39,53 +39,79 @@ export function ConfigureProfile(props: ConfigureProfileProps) {
         To create the profile and config file, please connect the account
         the delivery service will use. Also, we need this information:
 
-        {/* Input field to enter ENS name */}
-        <p className="config-profile-para">
-            <span className="input-heading">ENS:</span>
-            <input
-                className="input-field"
-                value={props.ens}
-                onChange={(event) => props.handleEnsChange(event)} />
-            <b className="mandatory">*</b>
-            (the ens domain your delivery service will use, e.g.
-            myPersonalDeliveryService.eth)
-        </p>
+        <div className="base-input-container">
+            {/* Error msg of ENS name */}
+            <div className="input-description">
+                <span className="input-heading-hidden">ENS:</span>
+                {props.ensError && <span className="error">{props.ensError}</span>}
+            </div>
+            {/* Input field to enter ENS name */}
+            <div className="input-container">
+                <span className="input-heading">ENS:</span>
+                <input
+                    className="input-field"
+                    value={props.ens}
+                    onChange={(event) => props.handleEnsChange(event)} />
+            </div>
+            {/* Description content for ENS name */}
+            <div className="input-description">
+                <span className="input-heading-hidden">ENS:</span>
+                The ens domain your delivery service will use, e.g.
+                myPersonalDeliveryService.eth
+            </div>
+        </div>
 
-        {/* Error msg of ENS name */}
-        {props.ensError && <span className="error">{props.ensError}</span>}
+        <div className="base-input-container">
+            {/* Error msg of URL endpoint */}
+            <div className="input-description">
+                <span className="input-heading-hidden">URL:</span>
+                {props.urlError && <span className="error">{props.urlError}</span>}
+            </div>
+            {/* Input field to enter URL name */}
+            <div className="input-container">
+                <span className="input-heading">URL:</span>
+                <input
+                    className="input-field"
+                    value={props.url}
+                    onChange={(event) => props.handleUrlChange(event)} />
+            </div>
+            {/* Description content for URL name */}
+            <div className="input-description">
+                <span className="input-heading-hidden">URL:</span>
+                The url your delivery service will use, e.g.
+                https://my-personal-delivery-service.com
+            </div>
+        </div>
 
-        {/* Input field to enter URL endpoint */}
-        <p className="config-profile-para">
-            <span className="input-heading">URL:</span>
-            <input
-                className="input-field"
-                value={props.url}
-                onChange={(event) => props.handleUrlChange(event)} />
-            <b className="mandatory">*</b>
-            (the url your delivery service will use, e.g.
-            https://my-personal-delivery-service.com)
-        </p>
+        <div className="base-input-container">
+            {/* Error msg of RPC endpoint */}
+            <div className="input-description">
+                <span className="input-heading-hidden">RPC:</span>
+                {props.rpcError && <span className="error">{props.rpcError}</span>}
+            </div>
+            {/* Input field to enter RPC name */}
+            <div className="input-container">
+                <span className="input-heading">RPC:</span>
+                <input
+                    className="input-field"
+                    value={props.rpc}
+                    onChange={(event) => props.handleRpcChange(event)} />
+            </div>
+            {/* Description content for RPC name */}
+            <div className="input-description">
+                <span className="input-heading-hidden">RPC:</span>
+                The rpc url your delivery service will use, e.g.
+                https://mainnet.infura.io/v3/f02ijf0283i0jq0jdoisjd07829
+                RPC can be added later also to the dm3-ds.env file.
+            </div>
+        </div>
 
-        {/* Error msg of URL endpoint */}
-        {props.urlError && <span className="error">{props.urlError}</span>}
+        <div className="input-description">
+            <span className="input-heading-hidden">RPC:</span>
 
-        {/* Input field to enter RPC node url */}
-        <p className="config-profile-para">
-            <span className="input-heading">RPC:</span>
-            <input
-                className="input-field"
-                value={props.rpc}
-                onChange={(event) => props.handleRpcChange(event)} />
-            <b className="mandatory">*</b>
-            (the rpc url your delivery service will use, e.g.
-            https://mainnet.infura.io/v3/f02ijf0283i0jq0jdoisjd07829)
-        </p>
-
-        {/* Error msg of RPC node endpoint */}
-        {props.rpcError && <span className="error">{props.rpcError}</span>}
-
-        {/* Success msg of profile creation */}
-        {showSuccessMsg && <span className="success">Profile created successfully!</span>}
+            {/* Success msg of profile creation */}
+            {showSuccessMsg && <span className="success">Profile created successfully!</span>}
+        </div>
 
         {/* Button to sign the profile */}
         <div>

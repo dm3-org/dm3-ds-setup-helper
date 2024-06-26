@@ -19,7 +19,7 @@ export function Docker() {
                 and save it as docker-compose.yml
             </li>
             <li>
-                Move all 3 files (docker-compose.yml, .env, config.yml) into a
+                Move all 3 files (docker-compose.yml, dm3-ds.env, config.yml) into a
                 directory on the machine you want to run the service on (e.g. a
                 web server)
             </li>

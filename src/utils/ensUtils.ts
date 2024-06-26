@@ -1,44 +1,45 @@
-import { isValidName, ethers } from "ethers";
+import { isValidName } from "ethers";
 import { createPublicClient, http } from 'viem';
 import { addEnsContracts } from '@ensdomains/ensjs';
 import { getOwner } from '@ensdomains/ensjs/public';
 import { mainnet, sepolia, optimism } from 'viem/chains';
 
-const validateEns = async (ens: string, setEnsError: Function, account: string, chainId: number): Promise<boolean> => {
+export const validateEns = (ens: string, setEnsError?: Function): boolean => {
+    let result: boolean = true;
+
     if (!isValidName(ens)) {
+        result = false;
+    }
+
+    if (!ens.includes(".") || !ens.endsWith(".eth") || ens.split(".")[0].length < 3) {
+        result = false;
+    }
+
+    if (!result && setEnsError) {
         setEnsError("Invalid ENS name");
-        return false;
     }
 
-    const isEnsNameOwned = await isAccountOwnerOfEnsName(ens, account, setEnsError, chainId);
-
-    if (!isEnsNameOwned) {
-        return false;
-    }
-
-    return true;
+    return result;
 }
 
 const validateRpc = (rpc: string, setRpcError: Function): boolean => {
     try {
 
-        if (!rpc.length) {
+        // If RPC is not provided, means it will be added in .env later.
+        // So, no need to validate it
+        if (!rpc.length) return true;
+
+        const prefixCheck = rpc.startsWith("http://") || rpc.startsWith("https://");
+        const contentCheck = rpc.split("//")[1].length;
+
+        if (!prefixCheck || !contentCheck) {
             setRpcError("Invalid RPC endpoint");
             return false;
         }
 
-        const validatedUrl = new URL(rpc);
-
-        if (validatedUrl.protocol !== "https:") {
-            setRpcError("RPC endpoint must start with https");
-            return false;
-        }
-
-        new ethers.JsonRpcProvider(rpc);
         return true;
 
     } catch (error) {
-        console.log("Error in RPC node : ", error);
         setRpcError("Invalid RPC endpoint");
         return false;
     }
@@ -47,10 +48,11 @@ const validateRpc = (rpc: string, setRpcError: Function): boolean => {
 const validateUrl = (url: string, setUrlError: Function): boolean => {
     try {
 
-        const validatedUrl = new URL(url);
+        const prefixCheck = url.startsWith("http://") || url.startsWith("https://");
+        const contentCheck = url.split("//")[1].length;
 
-        if (validatedUrl.protocol !== "https:") {
-            setUrlError("URL endpoint must start with https");
+        if (!prefixCheck || !contentCheck) {
+            setUrlError("Invalid URL endpoint");
             return false;
         }
 
@@ -69,16 +71,14 @@ export const areAllPropertiesValid = async (
     setRpcError: Function,
     url: string,
     setUrlError: Function,
-    account: string,
-    chainId: number,
 ): Promise<boolean> => {
-    const isEnsValid = await validateEns(ens, setEnsError, account, chainId);
+    const isEnsValid = await validateEns(ens, setEnsError);
     const isRpcValid = validateRpc(rpc, setRpcError);
     const isUrlValid = validateUrl(url, setUrlError);
     return (isEnsValid && isRpcValid && isUrlValid);
 }
 
-const isAccountOwnerOfEnsName = async (
+export const isAccountOwnerOfEnsName = async (
     ensName: string,
     account: string,
     setEnsError: Function,

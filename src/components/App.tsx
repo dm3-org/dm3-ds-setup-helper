@@ -11,10 +11,11 @@ import logo from "./../images/dm3-logo.png";
 
 const App = () => {
 
-  const { address, isConnected, handleEnsChange, handleRpcChange, handleUrlChange, createConfigAndProfile,
-    profileAndKeysCreated, storeEnv, profile, writeContractIsPending, publishProfile,
-    ensResolverFound, hash, writeContractError, ensError, rpcError, urlError,
-    ensInput, rpc, url } = useConfiguration();
+  const { address, isConnected, handleEnsChange, handleRpcChange, handleUrlChange,
+    createConfigAndProfile, profileAndKeysCreated, storeEnv, profile, writeContractIsPending,
+    publishProfile, ensResolverFound, hash, writeContractError, ensError, rpcError, urlError,
+    ensInput, rpc, url, userProfile, userProfileError, handleUserProfileChange,
+    ensOwnershipError, userEns, userEnsError, handleUserEnsChange } = useConfiguration();
 
   return (
     <div className="ds-container">
@@ -64,11 +65,17 @@ const App = () => {
       <PublishProfile
         ensResolverFound={ensResolverFound}
         hash={hash}
-        profile={profile}
+        userProfile={userProfile}
         profileAndKeysCreated={profileAndKeysCreated}
         publishProfile={publishProfile}
         writeContractError={writeContractError}
         writeContractIsPending={writeContractIsPending}
+        handleUserProfileChange={handleUserProfileChange}
+        userProfileError={userProfileError}
+        ensOwnershipError={ensOwnershipError}
+        userEns={userEns}
+        userEnsError={userEnsError}
+        handleUserEnsChange={handleUserEnsChange}
       />
 
       <Docker />

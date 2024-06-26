@@ -1,4 +1,4 @@
-export const ENV_FILE_NAME = ".env";
+export const ENV_FILE_NAME = "dm3-ds.env";
 
 export const CONFIG_FILE_NAME = "config.yml";
 
