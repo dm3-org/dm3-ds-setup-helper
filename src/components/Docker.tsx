@@ -3,9 +3,9 @@ import { DOCKER_COMPOSE_DOWNLOAD_URL } from "../utils/constants";
 
 export function Docker() {
 
-    return <div>
-        <h2>Step 4: </h2>
-        <ol>
+    return <div className="steps-container step">
+        <h2 className="heading-text">Step 4: Dockerize</h2>
+        <ol className="description-text">
             <li>
                 Download {" "}
                 <a
@@ -19,7 +19,7 @@ export function Docker() {
                 and save it as docker-compose.yml
             </li>
             <li>
-                Move all 3 files (docker-compose.yml, .env, config.yml) into a
+                Move all 3 files (docker-compose.yml, dm3-ds.env, config.yml) into a
                 directory on the machine you want to run the service on (e.g. a
                 web server)
             </li>

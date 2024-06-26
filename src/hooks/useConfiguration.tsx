@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { namehash, normalize } from "viem/ens";
 import { resolverAbi } from "../utils/resolverAbi";
 import { configureEnv } from "../utils/configureEnv";
-import { areAllPropertiesValid } from "../utils/ensUtils";
+import { areAllPropertiesValid, isAccountOwnerOfEnsName, validateEns } from "../utils/ensUtils";
 import { useAccount, useChainId, useEnsResolver, useSignMessage, useWriteContract } from "wagmi";
 import { DeliveryServiceProfile, DeliveryServiceProfileKeys } from "@dm3-org/dm3-lib-profile";
 import { createKeyPair, createSigningKeyPair, createStorageKey } from "@dm3-org/dm3-lib-crypto";
@@ -10,24 +10,38 @@ import { DELIVERY_SERVICE, ENV_FILE_NAME, KEY_CREATION_MESSAGE, ZERO_ADDRESS } f
 
 export const useConfiguration = () => {
 
-    const [ensInput, setEnsInput] = useState<string>("");
+    // ens domain for profile
     const [ensDomain, setEnsDomain] = useState<string>("");
 
+    // create profile
+    const [ensInput, setEnsInput] = useState<string>("");
     const [url, setUrl] = useState<string>("");
     const [rpc, setRpc] = useState<string>("");
 
+    // created profile & keys
     const [keys, setKeys] = useState<DeliveryServiceProfileKeys>();
     const [profile, setProfile] = useState<DeliveryServiceProfile>();
+
+    // publish profile
+    const [userProfile, setUserProfile] = useState<string>("");
+    const [userEns, setUserEns] = useState<string>("");
 
     const [ensResolverFound, setEnsResolverFound] = useState<boolean>(false);
     const [keyCreationMessage, setKeyCreationMessage] = useState<string>("");
     const [profileAndKeysCreated, setProfileAndKeysCreated] = useState<boolean>(false);
 
+    // errors
     const [ensError, setEnsError] = useState<string | null>(null);
     const [urlError, setUrlError] = useState<string | null>(null);
     const [rpcError, setRpcError] = useState<string | null>(null);
+    const [ensOwnershipError, setEnsOwnershipError] = useState<string | null>(null);
+    const [userProfileError, setUserProfileError] = useState<string | null>(null);
+    const [userEnsError, setUserEnsError] = useState<string | null>(null);
 
+    // connected chain
     const chainId = useChainId();
+
+    // connected account
     const { isConnected, address, connector } = useAccount();
 
     const {
@@ -48,6 +62,7 @@ export const useConfiguration = () => {
         writeContract,
         isPending: writeContractIsPending,
         error: writeContractError,
+        reset, // resets the state of write contract hook
     } = useWriteContract();
 
     const handleEnsChange = (
@@ -71,9 +86,31 @@ export const useConfiguration = () => {
         setRpcError(null);
     };
 
+    const handleUserProfileChange = (
+        event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) => {
+        setUserProfile(event.target.value);
+        setUserProfileError(null);
+        reset();
+    };
+
+    const handleUserEnsChange = (
+        event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) => {
+        const ensValue = event.target.value;
+        setUserEns(ensValue);
+        setUserEnsError(null);
+        setEnsOwnershipError(null);
+        reset();
+        // sets ENS domain to get the resolver if ens name is valid
+        if (validateEns(ensValue)) {
+            setEnsDomain(ensValue);
+        }
+    };
+
     const createConfigAndProfile = async () => {
         const isValid = await areAllPropertiesValid(ensInput, setEnsError, rpc, setRpcError, url,
-            setUrlError, address as string, chainId);
+            setUrlError);
         if (!isValid) {
             return;
         }
@@ -103,14 +140,52 @@ export const useConfiguration = () => {
         link.click();
     }
 
-    const publishProfile = () => {
+    const validateProfile = (): boolean => {
+        try {
+            if (!userProfile.length) {
+                setUserProfileError("Invalid profile data");
+                return false;
+            }
+
+            const jsonProfile = JSON.parse(userProfile);
+
+            if (!jsonProfile.publicEncryptionKey || !jsonProfile.publicSigningKey || !jsonProfile.url) {
+                setUserProfileError("Invalid profile data");
+                return false;
+            }
+
+            return true;
+        } catch (error) {
+            console.log("Invalid profile data : ", error);
+            setUserProfileError("Invalid profile data");
+            return false;
+        }
+    }
+
+    const publishProfile = async () => {
+
+        // validate ens name
+        const isEnsValid = validateEns(userEns, setUserEnsError);
+
+        if (!isEnsValid) {
+            return;
+        }
+
+        // validate user profile data
+        const isProfileValid = validateProfile();
+
+        if (!isProfileValid) {
+            return;
+        }
+
+        // validate the ens name access to add text records
+        const isEnsNameOwner = await isAccountOwnerOfEnsName(userEns, address as string, setEnsOwnershipError, chainId);
+
+        if (!isEnsNameOwner) {
+            return;
+        }
+
         if (ensResolver) {
-            // console.log("checking ens domain controller");
-            // const { data: balance } = useReadContract({
-            //   ...wagmiContractConfig,
-            //   functionName: "balanceOf",
-            //   args: ["0x03A71968491d55603FFe1b11A9e23eF013f75bCF"],
-            // });
             console.log("publishing profile");
             writeContract({
                 address: ensResolver,
@@ -119,7 +194,7 @@ export const useConfiguration = () => {
                 args: [
                     namehash(ensDomain),
                     DELIVERY_SERVICE,
-                    JSON.stringify(profile),
+                    userProfile,
                 ],
             });
             console.log("published profile");
@@ -135,9 +210,17 @@ export const useConfiguration = () => {
         setEnsInput("");
         setRpc("");
         setUrl("");
+        setUserEns("");
+        setUserProfile("");
         setEnsError(null);
         setRpcError(null);
         setUrlError(null);
+        setUserEnsError(null);
+        setUserProfileError(null);
+        setEnsOwnershipError(null);
+        setProfile(undefined);
+        setKeys(undefined);
+        reset();
     }, [address]);
 
     useEffect(() => {
@@ -174,8 +257,10 @@ export const useConfiguration = () => {
                 };
 
                 setProfile(profile);
+                setUserProfile(JSON.stringify(profile));
                 setKeys(keys);
                 setProfileAndKeysCreated(true);
+                setUserEns(ensInput);
             }
         })();
     }, [signMessageData, variables?.message, url]);
@@ -201,7 +286,15 @@ export const useConfiguration = () => {
         connector,
         ensInput,
         url,
-        rpc
+        rpc,
+        ensOwnershipError,
+        setEnsOwnershipError,
+        userProfile,
+        userProfileError,
+        handleUserProfileChange,
+        userEns,
+        userEnsError,
+        handleUserEnsChange
     };
 
 }
