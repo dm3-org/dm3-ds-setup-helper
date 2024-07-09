@@ -148,7 +148,7 @@ export const useConfiguration = () => {
         }
         setEnsDomain(ensInput);
         const dsEnsAndUrl = JSON.stringify({
-            ens: ensDomain,
+            ens: ensInput,
             url: url,
         });
         const _keyCreationMessage = KEY_CREATION_MESSAGE + dsEnsAndUrl;
