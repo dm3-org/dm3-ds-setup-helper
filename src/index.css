@@ -133,6 +133,7 @@ body {
 
 .link {
   color: #551A8B;
+  cursor: pointer;
 }
 
 .info {
