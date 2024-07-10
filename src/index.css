@@ -132,7 +132,7 @@ body {
 }
 
 .link {
-  color: #551A8B;
+  color: #8B7FF4;
   cursor: pointer;
 }
 
@@ -144,7 +144,7 @@ body {
 .success {
   font-size: 14px;
   padding-top: 0.5rem;
-  color: #0F980D;
+  color: #8B7FF4;
 }
 
 .profile {
@@ -157,7 +157,7 @@ body {
 
 .info-text {
   font-size: 14px;
-  color: #0F980D;
+  color: #8B7FF4;
   margin-bottom: 0px;
 }
 
