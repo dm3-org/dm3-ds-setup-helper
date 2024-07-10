@@ -72,6 +72,7 @@ const App = () => {
                 />
 
                 <Env
+                    rpc={rpc}
                     profileAndKeysCreated={profileAndKeysCreated}
                     storeEnv={storeEnv}
                 />
