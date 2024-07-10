@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/dm3-ds-setup-helper/static/css/main.f7bf3686.css",
-    "main.js": "/dm3-ds-setup-helper/static/js/main.522cc4e9.js",
+    "main.css": "/dm3-ds-setup-helper/static/css/main.7496f91f.css",
+    "main.js": "/dm3-ds-setup-helper/static/js/main.bd120f06.js",
     "static/js/5823.d94a4fa8.chunk.js": "/dm3-ds-setup-helper/static/js/5823.d94a4fa8.chunk.js",
     "static/js/2200.15fd7a7d.chunk.js": "/dm3-ds-setup-helper/static/js/2200.15fd7a7d.chunk.js",
     "static/js/7771.0e452fc4.chunk.js": "/dm3-ds-setup-helper/static/js/7771.0e452fc4.chunk.js",
@@ -58,14 +58,14 @@
     "static/js/8856.c2639922.chunk.js": "/dm3-ds-setup-helper/static/js/8856.c2639922.chunk.js",
     "static/js/9147.097c4f7a.chunk.js": "/dm3-ds-setup-helper/static/js/9147.097c4f7a.chunk.js",
     "static/js/160.f6471006.chunk.js": "/dm3-ds-setup-helper/static/js/160.f6471006.chunk.js",
-    "static/js/8629.39e86787.chunk.js": "/dm3-ds-setup-helper/static/js/8629.39e86787.chunk.js",
+    "static/js/8629.e955f98e.chunk.js": "/dm3-ds-setup-helper/static/js/8629.e955f98e.chunk.js",
     "static/js/9867.d0139f96.chunk.js": "/dm3-ds-setup-helper/static/js/9867.d0139f96.chunk.js",
     "static/js/7066.4e431ec4.chunk.js": "/dm3-ds-setup-helper/static/js/7066.4e431ec4.chunk.js",
     "static/js/1197.d8d758c3.chunk.js": "/dm3-ds-setup-helper/static/js/1197.d8d758c3.chunk.js",
     "static/js/6710.9009efb4.chunk.js": "/dm3-ds-setup-helper/static/js/6710.9009efb4.chunk.js",
     "index.html": "/dm3-ds-setup-helper/index.html",
-    "main.f7bf3686.css.map": "/dm3-ds-setup-helper/static/css/main.f7bf3686.css.map",
-    "main.522cc4e9.js.map": "/dm3-ds-setup-helper/static/js/main.522cc4e9.js.map",
+    "main.7496f91f.css.map": "/dm3-ds-setup-helper/static/css/main.7496f91f.css.map",
+    "main.bd120f06.js.map": "/dm3-ds-setup-helper/static/js/main.bd120f06.js.map",
     "5823.d94a4fa8.chunk.js.map": "/dm3-ds-setup-helper/static/js/5823.d94a4fa8.chunk.js.map",
     "7771.0e452fc4.chunk.js.map": "/dm3-ds-setup-helper/static/js/7771.0e452fc4.chunk.js.map",
     "466.0b483ea8.chunk.js.map": "/dm3-ds-setup-helper/static/js/466.0b483ea8.chunk.js.map",
@@ -120,14 +120,14 @@
     "9128.35c390ac.chunk.js.map": "/dm3-ds-setup-helper/static/js/9128.35c390ac.chunk.js.map",
     "8856.c2639922.chunk.js.map": "/dm3-ds-setup-helper/static/js/8856.c2639922.chunk.js.map",
     "160.f6471006.chunk.js.map": "/dm3-ds-setup-helper/static/js/160.f6471006.chunk.js.map",
-    "8629.39e86787.chunk.js.map": "/dm3-ds-setup-helper/static/js/8629.39e86787.chunk.js.map",
+    "8629.e955f98e.chunk.js.map": "/dm3-ds-setup-helper/static/js/8629.e955f98e.chunk.js.map",
     "9867.d0139f96.chunk.js.map": "/dm3-ds-setup-helper/static/js/9867.d0139f96.chunk.js.map",
     "7066.4e431ec4.chunk.js.map": "/dm3-ds-setup-helper/static/js/7066.4e431ec4.chunk.js.map",
     "1197.d8d758c3.chunk.js.map": "/dm3-ds-setup-helper/static/js/1197.d8d758c3.chunk.js.map",
     "6710.9009efb4.chunk.js.map": "/dm3-ds-setup-helper/static/js/6710.9009efb4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f7bf3686.css",
-    "static/js/main.522cc4e9.js"
+    "static/css/main.7496f91f.css",
+    "static/js/main.bd120f06.js"
   ]
 }
