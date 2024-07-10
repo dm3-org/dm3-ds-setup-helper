@@ -1,5 +1,4 @@
 import { downloadDockerFile } from '../utils/fileUtils';
-import { DOCKER_COMPOSE_DOWNLOAD_URL } from '../utils/constants';
 
 export function Docker() {
     return (
@@ -7,16 +6,11 @@ export function Docker() {
             <h2 className="heading-text">Step 4: Dockerize</h2>
             <ol className="description-text">
                 <li>
-                    Download{' '}
-                    <a
-                        href={DOCKER_COMPOSE_DOWNLOAD_URL}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={downloadDockerFile}
-                    >
+                    Download {''}
+                    <span className="link" onClick={downloadDockerFile}>
                         the docker compose file
-                    </a>{' '}
-                    and save it as docker-compose.yml
+                    </span>
+                    {''} and save it as docker-compose.yml
                 </li>
                 <li>
                     Move all 3 files (docker-compose.yml, dm3-ds.env,
