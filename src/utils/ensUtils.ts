@@ -11,11 +11,7 @@ export const validateEns = (ens: string, setEnsError?: Function): boolean => {
         result = false;
     }
 
-    if (
-        !ens.includes('.') ||
-        !ens.endsWith('.eth') ||
-        ens.split('.')[0].length < 2
-    ) {
+    if (!ens.includes('.') || !ens.endsWith('.eth')) {
         result = false;
     }
 
