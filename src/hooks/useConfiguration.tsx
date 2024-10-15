@@ -27,6 +27,7 @@ import {
     DELIVERY_SERVICE,
     ENV_FILE_NAME,
     KEY_CREATION_MESSAGE,
+    PROFILE_PREFIX,
     ZERO_ADDRESS,
 } from '../utils/constants';
 
@@ -232,13 +233,16 @@ export const useConfiguration = () => {
             return;
         }
 
+        // Profile data to publish on ENS
+        const profileData = PROFILE_PREFIX.concat(userProfile);
+
         if (ensResolver) {
             console.log('publishing profile');
             writeContract({
                 address: ensResolver,
                 abi: resolverAbi,
                 functionName: 'setText',
-                args: [namehash(ensDomain), DELIVERY_SERVICE, userProfile],
+                args: [namehash(ensDomain), DELIVERY_SERVICE, profileData],
             });
             console.log('published profile');
             console.log('transaction hash: ', hash);
