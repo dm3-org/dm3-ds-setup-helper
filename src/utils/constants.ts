@@ -4,6 +4,8 @@ export const CONFIG_FILE_NAME = 'config.yml';
 
 export const DELIVERY_SERVICE = 'network.dm3.deliveryService';
 
+export const PROFILE_PREFIX = 'data:application/json,';
+
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const GITHUB_SOURCE_CODE =
